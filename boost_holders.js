@@ -25,6 +25,8 @@ const config = {
     minAmountForHolder: parseFloat(process.env.MIN_AMOUNT_FOR_HOLDER) || 0.03,
     maxAmountForHolder: parseFloat(process.env.MAX_AMOUNT_FOR_HOLDER) || 0.05,
     mnemonic: process.env.MNEMONIC_FOR_HOLDER,
+    minDelay: Number(process.env.MIN_DELAY) || 3000,
+    maxDelay: Number(process.env.MAX_DELAY) || 10000,
 };
 const CHECKPOINT_FILE = path.join(__dirname, 'checkpoint.json');
 
@@ -183,8 +185,9 @@ async function executeBatchBuy(connection, wallets, mintAddress) {
             console.error(`❌ 子钱包 #${wallet.index} 买入失败: ${err.message}`);
             recordFailedIndex(wallet.index);
         }
-        console.log(`[等待] 2 秒后进行下一次操作...`);
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        const nextWait = Math.floor(Math.random() * (config.maxDelay - config.minDelay)) + config.minDelay;
+        console.log(`[等待] ${nextWait / 1000} 秒后进行下一次操作...`);
+        await new Promise(resolve => setTimeout(resolve, nextWait));
     }
     saveCheckpoint(wallets[wallets.length - 1].index + 1);
     console.log(`批量购买完成。子钱包序号: #${wallets[0].index} - #${wallets[wallets.length - 1].index}`);
