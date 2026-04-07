@@ -1,11 +1,6 @@
 {
   "currentIndex": 20,
-  "failedIndices": [
-    11,
-    12,
-    13,
-    14
-  ],
-  "currentSweptIndex": 20,
+  "failedIndices": [],
+  "currentSweptIndex": 0,
   "failedSweepIndices": []
 }
